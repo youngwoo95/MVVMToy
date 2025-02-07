@@ -6,11 +6,54 @@
         xmlns:local="clr-namespace:SlideMenuBarExample"
         xmlns:svg="http://sharpvectors.codeplex.com/svgc/"
         xmlns:vm="clr-namespace:SlideMenuBarExample.ViewModels"
+        xmlns:views="clr-namespace:SlideMenuBarExample.Views"
         mc:Ignorable="d"
         Background="#232323"
-        Title="MainWindow" Height="450" Width="1200">
+        Title="MainWindow" Height="800" Width="1200">
 
-    
+    <Window.Resources>
+        <Style x:Key="MenuRadioButtonStyle" TargetType="RadioButton">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="GhostWhite"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="RadioButton">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <!-- 왼쪽 선택표시 영역 (너비 5) -->
+                                <ColumnDefinition Width="5"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <!-- 선택 여부에 따라 색상이 변경되는 표시 영역 -->
+                            <Border x:Name="SelectionIndicator" Grid.Column="0" Background="Transparent"/>
+                            <!-- 실제 콘텐츠 영역 -->
+                            <Border x:Name="ContentBorder" Grid.Column="1" Background="{TemplateBinding Background}">
+                                <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                              Margin="{TemplateBinding Padding}"/>
+                            </Border>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <!-- 마우스 오버 시 콘텐츠 배경 변경 -->
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="ContentBorder" Property="Background" Value="#2D2D2D"/>
+                            </Trigger>
+                            <!-- RadioButton이 선택되었을 때 왼쪽 표시 영역 색상 변경 -->
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="SelectionIndicator" Property="Background" Value="DodgerBlue"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+
 
     <Window.DataContext>
         <vm:MainViewModel/>
@@ -23,9 +66,9 @@
         </Grid.RowDefinitions>
         
         <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right">
-            <Button Content="&#x1F5D5;" Width="30" Background="Transparent" Foreground="White" BorderThickness="0"/>
-            <Button Content="&#x1F5D7;" Width="30" Background="Transparent" Foreground="White" BorderThickness="0"/>
-            <Button Content="&#x1F5D9;" Width="30" Background="Transparent" Foreground="White" BorderThickness="0"/>
+            <Button Content="&#x1F5D5;" Width="30" Background="Transparent" Foreground="White" BorderThickness="0" Click="Minimum_Click"/>
+            <Button Content="&#x1F5D7;" Width="30" Background="Transparent" Foreground="White" BorderThickness="0" Click="Maximum_Click"/>
+            <Button Content="&#x1F5D9;" Width="30" Background="Transparent" Foreground="White" BorderThickness="0" Click="Close_Click"/>
         </StackPanel>
         
         <Grid Grid.Row="1">
@@ -90,44 +133,79 @@
                     </TextBlock>
 
                 </Grid>
-                <StackPanel Grid.Row="2" Margin="10 20 10 0">
-                    <Button Background="Transparent" Foreground="GhostWhite" HorizontalContentAlignment="Left" Padding="10" BorderThickness="0">
-                        <Button.Template>
-                            <ControlTemplate TargetType="Button">
-                                <Border x:Name="border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
-                                    <!-- 여기서 Padding을 TemplateBinding을 통해 반영합니다. -->
-                                    <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" Margin="{TemplateBinding Padding}" />
-                                </Border>
-                                <ControlTemplate.Triggers>
-                                    <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter TargetName="border" Property="Background" Value="Red"/>
-                                    </Trigger>
-                                </ControlTemplate.Triggers>
-                            </ControlTemplate>
-                        </Button.Template>
+                <StackPanel Grid.Row="2" Margin="10,20,10,0">
+                    <!-- 메인화면 메뉴 -->
+                    <RadioButton Style="{StaticResource MenuRadioButtonStyle}" GroupName="MenuGroup" Command="{Binding ShowHomeCommand}" IsChecked="True">
                         <StackPanel Orientation="Horizontal">
                             <Image Source="ico/home.png" Width="25"/>
-                            <TextBlock Text="메인화면" Margin="10 0 0 0" FontSize="14" VerticalAlignment="Center"/>
+                            <TextBlock Text="메인화면" Margin="10,0,0,0" FontSize="14" VerticalAlignment="Center"/>
                         </StackPanel>
-                    </Button>
+                    </RadioButton>
 
-
-                    <Button Background="Transparent" Foreground="GhostWhite" HorizontalContentAlignment="Left" Padding="10" BorderThickness="0">
+                    <!-- 기본설정 관리 메뉴 -->
+                    <RadioButton Style="{StaticResource MenuRadioButtonStyle}" GroupName="MenuGroup" Margin="0,5,0,0" Command="{Binding BasicInfoCommand}">
                         <StackPanel Orientation="Horizontal">
                             <Image Source="ico/menubutton.png" Width="27"/>
-                            <TextBlock Text="기본설정 관리" Margin="10 0 0 0" FontSize="14" VerticalAlignment="Center"/>
+                            <TextBlock Text="기본 정보 관리" Margin="10,0,0,0" FontSize="14" VerticalAlignment="Center"/>
                         </StackPanel>
-                    </Button>
-                    
-                    <Button Background="Transparent" Foreground="GhostWhite" HorizontalContentAlignment="Left" Padding="10" BorderThickness="0">
-                         <StackPanel Orientation="Horizontal">
-                            <Image Source="ico/setting4.png" Width="27"/>
-                            <TextBlock Text="설정" Margin="10 0 0 0" FontSize="14" VerticalAlignment="Center"/>
-                        </StackPanel>
-                    </Button>
-                </StackPanel>
+                    </RadioButton>
 
+                    <!-- 기본설정 관리 메뉴 -->
+                    <RadioButton Style="{StaticResource MenuRadioButtonStyle}" GroupName="MenuGroup" Margin="0,5,0,0" Command="{Binding BasicInfoCommand}">
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="ico/menubutton.png" Width="27"/>
+                            <TextBlock Text="설비 유지 관리" Margin="10,0,0,0" FontSize="14" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </RadioButton>
+
+                    <!-- 기본설정 관리 메뉴 -->
+                    <RadioButton Style="{StaticResource MenuRadioButtonStyle}" GroupName="MenuGroup" Margin="0,5,0,0" Command="{Binding BasicInfoCommand}">
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="ico/menubutton.png" Width="27"/>
+                            <TextBlock Text="자재 관리" Margin="10,0,0,0" FontSize="14" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </RadioButton>
+
+                    <!-- 기본설정 관리 메뉴 -->
+                    <RadioButton Style="{StaticResource MenuRadioButtonStyle}" GroupName="MenuGroup" Margin="0,5,0,0" Command="{Binding BasicInfoCommand}">
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="ico/menubutton.png" Width="27"/>
+                            <TextBlock Text="사용자 관리" Margin="10,0,0,0" FontSize="14" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </RadioButton>
+
+                    <!-- 기본설정 관리 메뉴 -->
+                    <RadioButton Style="{StaticResource MenuRadioButtonStyle}" GroupName="MenuGroup" Margin="0,5,0,0" Command="{Binding BasicInfoCommand}">
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="ico/menubutton.png" Width="27"/>
+                            <TextBlock Text="민원 관리" Margin="10,0,0,0" FontSize="14" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </RadioButton>
+
+                    <!-- 설정 메뉴 -->
+                    <RadioButton Style="{StaticResource MenuRadioButtonStyle}" GroupName="MenuGroup" Margin="0,5,0,0" Command="{Binding ShowSettingCommend}">
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="ico/setting4.png" Width="27"/>
+                            <TextBlock Text="설정" Margin="10,0,0,0" FontSize="14" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </RadioButton>
+                </StackPanel>
             </Grid>
+
+            <ContentControl Grid.Column="1" Content="{Binding CurrentViewModel}">
+                <ContentControl.Resources>
+                    <DataTemplate DataType="{x:Type vm:HomeViewModel}">
+                        <views:HomeView/>
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type vm:BasicInfoViewModel}">
+                        <views:BasicInfoView/>
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type vm:SettingViewModel}">
+                        <views:SettingView/>
+                    </DataTemplate>
+                </ContentControl.Resources>
+            </ContentControl>
+            
         </Grid>
     </Grid>
 </Window>
