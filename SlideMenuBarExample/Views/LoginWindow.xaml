@@ -9,9 +9,75 @@
         Background="#232323"
         WindowStartupLocation="CenterScreen"
         Title="LoginWindow" Height="250" Width="300">
+
+    <Window.Resources>
+        <Style x:Key="LoginStyle" TargetType="Button">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Background" Value="#323c69"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Padding" Value="10,5"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border"
+                                Background="{TemplateBinding Background}"
+                                CornerRadius="5"
+                                BorderThickness="0"
+                                SnapsToDevicePixels="True">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"
+                                              RecognizesAccessKey="True"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <!-- 마우스 오버 시 배경색 변경 -->
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#223377"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
+        <Style x:Key="CancelStyle" TargetType="Button">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Background" Value="#c9161c"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Padding" Value="10,5"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border"
+                                Background="{TemplateBinding Background}"
+                                CornerRadius="5"
+                                BorderThickness="0"
+                                SnapsToDevicePixels="True">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"
+                                              RecognizesAccessKey="True"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <!-- 마우스 오버 시 배경색 변경 -->
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="Crimson"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
+    </Window.Resources>
+    
     <Grid>
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Width="250">
-            <TextBlock Text="로그인" FontSize="20" FontWeight="Bold" Margin="0,0,0,20" HorizontalAlignment="Center" Foreground="White"/>
+            <TextBlock Text="LOGIN" FontSize="20" FontWeight="Bold" Margin="0,0,0,20" HorizontalAlignment="Center" Foreground="White"/>
             
             <!-- 아이디 -->
             <Grid>
@@ -71,9 +137,9 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
 
-                <Button Content="로그인" Height="30" Grid.Column="0" Command="{Binding LoginCommand}"/>
+                <Button Content="로그인" Style="{StaticResource LoginStyle}"  Height="30" Grid.Column="0" Command="{Binding LoginCommand}"/>
 
-                <Button Content="취소" Height="30" Grid.Column="1" Command="{Binding CancelCommand}"/>
+                <Button Content="취소" Style="{StaticResource CancelStyle}" Height="30" Grid.Column="1" Command="{Binding CancelCommand}"/>
             </Grid>
             
             
