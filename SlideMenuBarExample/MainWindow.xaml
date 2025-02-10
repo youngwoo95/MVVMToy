@@ -93,9 +93,9 @@
                     </Border>
 
                     <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                        <TextBlock Text="[마스터]" Foreground="White" FontWeight="Bold"/>
-                        <TextBlock Text="Youngwoo Kim" Foreground="White" FontWeight="Bold"/>
-                        <TextBlock Text="rladyddn258@gmail.com" Foreground="White"/>
+                        <TextBlock Text="{Binding RoleName}" Foreground="White" FontWeight="Bold" Margin="0 0 0 5"/>
+                        <TextBlock Text="{Binding UserName}" Foreground="White" FontWeight="Bold"/>
+                        <TextBlock Text="{Binding PlaceName}" Foreground="White"/>
                     </StackPanel>
                 </Grid>
 

@@ -1,5 +1,6 @@
 ﻿using SharpVectors.Dom.Css;
 using SlideMenuBarExample.Commands;
+using SlideMenuBarExample.Commands.Interfaces;
 using System.Windows.Input;
 
 namespace SlideMenuBarExample.ViewModels
@@ -39,18 +40,28 @@ namespace SlideMenuBarExample.ViewModels
             }
         }
 
+        private readonly IAuthService AuthService;
+
+        public string RoleName { get; set; }
+        public string UserName { get; set; }
+        public string PlaceName { get; set; }
+
         /// <summary>
         /// 기본 생성자
         /// </summary>
-        public MainViewModel()
+        public MainViewModel(IAuthService _authservice)
         {
+            this.AuthService = _authservice;
             CurrentViewModel = new HomeViewModel();
             ShowHomeCommand = new RelayCommand(param => CurrentViewModel = new HomeViewModel());
             BasicInfoCommand = new RelayCommand(param => CurrentViewModel = new BasicInfoViewModel());
             ShowSettingCommend = new RelayCommand(param => CurrentViewModel = new SettingViewModel());
 
+            RoleName = $"[{AuthService.Role ?? ""}]";
+            UserName = AuthService.UserName ?? "";
+            PlaceName = AuthService.PlaceName ?? "";
         }
-
+        
 
 
     }
