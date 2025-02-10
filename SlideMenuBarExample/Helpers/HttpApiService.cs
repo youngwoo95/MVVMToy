@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 
 namespace SlideMenuBarExample.Helpers
@@ -34,10 +35,24 @@ namespace SlideMenuBarExample.Helpers
         /// </summary>
         /// <param name="url"></param>
         /// <returns></returns>
-        public async Task<HttpResponseMessage> GetAsync(string url)
+        public async Task<HttpResponseMessage> GetAsync(string url, string? jwtToken)
         {
-            return await httpClient.GetAsync(url);
+            var request = new HttpRequestMessage(HttpMethod.Get, url);
+            if(jwtToken != null)
+            {
+                // Authorization 헤더를 설정
+                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", jwtToken);
+                request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            }
+
+            // 요청 보내기
+            HttpResponseMessage response = await httpClient.SendAsync(request);
+            return response;
         }
+
+        
+        
+
 
         // ++ 추가적으로 PUT, DELETE 등의 메서드를 필요에 따라 구현할 수 있다.
 

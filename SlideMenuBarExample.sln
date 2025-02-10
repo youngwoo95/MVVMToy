@@ -5,8 +5,6 @@ VisualStudioVersion = 17.9.34607.119
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SlideMenuBarExample", "SlideMenuBarExample\SlideMenuBarExample.csproj", "{1292F80D-0F5D-42EE-BE30-9B966B823EAA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DuratioinAnimationExample", "DuratioinAnimationExample\DuratioinAnimationExample.csproj", "{AD0175F8-7538-4A45-AD47-6C9B2D6F869D}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,10 +15,6 @@ Global
 		{1292F80D-0F5D-42EE-BE30-9B966B823EAA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1292F80D-0F5D-42EE-BE30-9B966B823EAA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1292F80D-0F5D-42EE-BE30-9B966B823EAA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AD0175F8-7538-4A45-AD47-6C9B2D6F869D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AD0175F8-7538-4A45-AD47-6C9B2D6F869D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AD0175F8-7538-4A45-AD47-6C9B2D6F869D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AD0175F8-7538-4A45-AD47-6C9B2D6F869D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

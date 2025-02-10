@@ -1,5 +1,9 @@
 ﻿using SlideMenuBarExample.Commands;
+using SlideMenuBarExample.Commands.Interfaces;
 using SlideMenuBarExample.Helpers;
+using System.Net.Http;
+using System.Net.Http.Json;
+using System.Windows;
 using System.Windows.Input;
 
 namespace SlideMenuBarExample.ViewModels
@@ -8,6 +12,12 @@ namespace SlideMenuBarExample.ViewModels
     {
         private string loginid;
         private string loginpassword;
+        public ICommand LoginCommand { get; }
+        public ICommand CancelCommand { get; }
+
+        private readonly HttpApiService HttpApiServices;
+        private readonly IWindowService WindowService;
+        private readonly IAuthService AuthService;
 
         public string LoginID
         {
@@ -29,17 +39,10 @@ namespace SlideMenuBarExample.ViewModels
             }
         }
 
-        // 로그인 성공 시 DialogResult(true) / 취소 시 DialogResult(false)를 알리기 위한 이벤트
-        public event EventHandler<bool?> RequestClose;
-
-        public ICommand LoginCommand { get; }
-        public ICommand CancelCommand { get; }
-
-        private readonly HttpApiService HttpApiServices;
-        
-
-        public LoginViewModel(HttpApiService _httpapiservice)
+        public LoginViewModel(HttpApiService _httpapiservice, IWindowService _windowservice, IAuthService _authservice)
         {
+            AuthService = _authservice;
+            WindowService = _windowservice;
             LoginCommand = new RelayCommand(ExecuteLogin);
             CancelCommand = new RelayCommand(ExecuteCancel);
 
@@ -50,19 +53,69 @@ namespace SlideMenuBarExample.ViewModels
         /// 로그인 버튼 이벤트
         /// </summary>
         /// <param name="parameter"></param>
-        private void ExecuteLogin(object parameter)
+        private async void ExecuteLogin(object parameter)
         {
-            if (LoginID == "admin" && LoginPasswword == "1234")
+            var loginData = new
             {
-                // 로그인 성공 알림 (DialogResult를 True로 전달)
-                RequestClose?.Invoke(this, true);
+                UserId = LoginID,
+                UserPassword = LoginPasswword
+            };
+
+            try
+            {
+                // 웹 서버의 로그인 API 앤드포인트 호출
+                HttpResponseMessage response = await HttpApiServices.PostAsync("api/Login/Login", loginData);
+
+                if(response.IsSuccessStatusCode)
+                {
+                    var responseBody = await response.Content.ReadFromJsonAsync<ResponseUnit<string>>();
+                    if(responseBody.code == 200) // 일반 사용자
+                    {
+                        AuthService.Token = responseBody.data;
+                        /*
+                         
+                         */
+
+                        RequestClose?.Invoke(this, true);
+                        // 일반 사용자는 그걸로 끝
+                    }
+                    else if(responseBody.code == 201) // 관리자
+                    {
+                        // 선택화면으로 변경되어야 하는데? 이건 어떻게하는거지?
+                        AuthService.Token = responseBody.data;
+                        // 관리자 일 경우, 사업장 선택 창을 띄워 선택 결과를 받음.
+                        int placeResult = await WindowService.ShowPlaceSelectWindowAsync();
+                        if(placeResult != -1)
+                        {
+                            AuthService.PlaceId = placeResult;
+                            RequestClose?.Invoke(this, true);
+                        }
+                        else
+                        {
+                            Console.WriteLine("사업장을 선택하지 않았습니다.");
+                        }
+                    }
+                    else
+                    {
+                        // 아이디 비밀번호가 안맞을때
+                    }
+                }
+                else
+                {
+                    var responseBody = await response.Content.ReadFromJsonAsync<ResponseUnit<string>>();
+                    MessageBox.Show(responseBody?.data);
+
+                }
             }
-            else
+            catch(Exception ex)
             {
-                Console.WriteLine(LoginID);
-                Console.WriteLine(LoginPasswword);
+
             }
         }
+
+
+        // 로그인 성공 시 DialogResult(true) / 취소 시 DialogResult(false)를 알리기 위한 이벤트
+        public event EventHandler<bool?> RequestClose;
 
         /// <summary>
         /// 취소 버튼 이벤트

@@ -35,7 +35,7 @@ namespace SlideMenuBarExample.Views
             if(DataContext is LoginViewModel vm)
             {
                 vm.LoginPasswword = txtPassword.Password;
-                if (string.IsNullOrWhiteSpace(vm.LoginPasswword))
+                if (string.IsNullOrEmpty(vm.LoginPasswword))
                     txtPasswordHint.Visibility = Visibility.Visible;
                 else
                     txtPasswordHint.Visibility = Visibility.Collapsed;

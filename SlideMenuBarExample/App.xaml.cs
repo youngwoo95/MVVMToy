@@ -1,4 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using SlideMenuBarExample.Commands;
+using SlideMenuBarExample.Commands.Interfaces;
 using SlideMenuBarExample.Helpers;
 using SlideMenuBarExample.ViewModels;
 using SlideMenuBarExample.Views;
@@ -36,7 +38,6 @@ namespace SlideMenuBarExample
 
                 // 이제 ShutdownMode를 OnMainWindowClose로 전환 (메인 창이 닫힐 때 애플리케이션 종료)
                 Application.Current.ShutdownMode = ShutdownMode.OnMainWindowClose;
-
                 mainWindow.Show();
             }
             else
@@ -52,15 +53,20 @@ namespace SlideMenuBarExample
         {
             Services = new ServiceCollection();
 
-            // ApiService는 싱글턴으로 등록 (기본 URL 설정)
+            // 서비스 등록
             Services.AddSingleton<HttpApiService>(new HttpApiService(Commons.BaseUrl));
+            Services.AddSingleton<IWindowService, WindowService>();
+            Services.AddSingleton<IAuthService, AuthService>();
 
             // ViewModel 등록
             Services.AddTransient<LoginViewModel>();
+            Services.AddTransient<PlaceSelectViewModel>();
             Services.AddTransient<MainViewModel>();
+
 
             // View 등록
             Services.AddTransient<LoginWindow>();
+            Services.AddTransient<PlaceSelectView>();
             Services.AddTransient<MainWindow>();
 
             ServiceProvider = Services.BuildServiceProvider();

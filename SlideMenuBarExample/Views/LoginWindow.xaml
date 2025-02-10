@@ -70,8 +70,9 @@
                     <ColumnDefinition/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
-                
+
                 <Button Content="로그인" Height="30" Grid.Column="0" Command="{Binding LoginCommand}"/>
+
                 <Button Content="취소" Height="30" Grid.Column="1" Command="{Binding CancelCommand}"/>
             </Grid>
             

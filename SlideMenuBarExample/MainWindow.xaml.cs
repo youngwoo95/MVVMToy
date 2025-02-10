@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using SlideMenuBarExample.ViewModels;
+using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
@@ -11,9 +12,10 @@ namespace SlideMenuBarExample
     /// </summary>
     public partial class MainWindow : Window
     {
-        public MainWindow()
+        public MainWindow(MainViewModel viewModel)
         {
             InitializeComponent();
+            DataContext = viewModel;
         }
 
         private void Minimum_Click(object sender, RoutedEventArgs e)
