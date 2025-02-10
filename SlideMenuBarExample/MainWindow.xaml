@@ -53,12 +53,6 @@
         </Style>
     </Window.Resources>
 
-
-
-    <Window.DataContext>
-        <vm:MainViewModel/>
-    </Window.DataContext>
-
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
