@@ -6,17 +6,17 @@ namespace SlideMenuBarExample.Commands
     /// ICommand 인터페이스의 간단한 구현체이다. - 거의 이게 베이스라고 보면됨.
     /// 실제 로직과 실행 가능 여부를 결정하는 조건을 지정할 수 있다.
     /// </summary>
-    public class RelayCommand : ICommand
+    public class RelayCommand<T> : ICommand
     {
-        private readonly Action<object> execute;
-        private readonly Predicate<object> canExecute;
+        private readonly Action<T> execute;
+        private readonly Predicate<T> canExecute;
 
         /// <summary>
         /// RelayCommand 생성자이다.
         /// </summary>
         /// <param name="_execute"> 명령이 실행될 때 호출되는 Action </param>
         /// <param name="_canExecute"> 명령의 실행 가능 여부를 반환하는 조건 (옵션) </param>
-        public RelayCommand(Action<object> _execute, Predicate<object> _canExecute = null)
+        public RelayCommand(Action<T> _execute, Predicate<T> _canExecute = null)
         {
             this.execute = _execute ?? throw new ArgumentNullException(nameof(execute));
             this.canExecute = _canExecute;
@@ -29,7 +29,7 @@ namespace SlideMenuBarExample.Commands
         /// <returns></returns>
         public bool CanExecute(object? parameter)
         {
-            return canExecute == null || canExecute(parameter);
+            return canExecute == null || canExecute((T)parameter);
         }
 
         /// <summary>
@@ -38,7 +38,7 @@ namespace SlideMenuBarExample.Commands
         /// <param name="parameter"></param>
         public void Execute(object? parameter)
         {
-            execute(parameter);
+            execute((T)parameter);
         }
 
         /// <summary>

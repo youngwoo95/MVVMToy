@@ -3,7 +3,10 @@ using SlideMenuBarExample.Commands;
 using SlideMenuBarExample.Commands.Interfaces;
 using SlideMenuBarExample.Helpers;
 using SlideMenuBarExample.ViewModels;
+using SlideMenuBarExample.ViewModels.BasicInfoManagement;
 using SlideMenuBarExample.Views;
+using SlideMenuBarExample.Views.BasicInfoManagement;
+using SlideMenuBarExample.Views.BasicInfoManagement.Buildings;
 using System.Windows;
 
 namespace SlideMenuBarExample
@@ -62,11 +65,29 @@ namespace SlideMenuBarExample
             Services.AddTransient<LoginViewModel>();
             Services.AddTransient<PlaceSelectViewModel>();
             Services.AddTransient<MainViewModel>();
+            
+            Services.AddTransient<HomeViewModel>();
+            Services.AddTransient<BasicInfoViewModel>();
+            Services.AddTransient<SettingViewModel>();
+
+            Services.AddTransient<BuildingViewModel>();
+            Services.AddTransient<LocationViewModel>();
+            Services.AddTransient<UnitViewModel>();
+            Services.AddTransient<BuildingEditViewModel>();
 
             // View 등록
             Services.AddTransient<LoginWindow>();
             Services.AddTransient<PlaceSelectView>();
             Services.AddTransient<MainWindow>();
+            
+            Services.AddTransient<HomeView>();
+            Services.AddTransient<BasicInfoView>();
+            Services.AddTransient<SettingView>();
+
+            Services.AddTransient<BuildingView>();
+            Services.AddTransient<LocationView>();
+            Services.AddTransient<UnitView>();
+            Services.AddTransient<BuildingEditView>();
 
             ServiceProvider = Services.BuildServiceProvider();
             

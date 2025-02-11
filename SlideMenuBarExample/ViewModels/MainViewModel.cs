@@ -1,4 +1,5 @@
-﻿using SharpVectors.Dom.Css;
+﻿using Microsoft.Extensions.DependencyInjection;
+using SharpVectors.Dom.Css;
 using SlideMenuBarExample.Commands;
 using SlideMenuBarExample.Commands.Interfaces;
 using System.ComponentModel;
@@ -53,19 +54,16 @@ namespace SlideMenuBarExample.ViewModels
         {
             this.AuthService = _authservice;
 
-            CurrentViewModel = new HomeViewModel(); // 초기화면 설정
+            CurrentViewModel = App.ServiceProvider.GetRequiredService<HomeViewModel>();
 
-            ShowHomeCommand = new RelayCommand(param => CurrentViewModel = new HomeViewModel());
-            BasicInfoCommand = new RelayCommand(param => CurrentViewModel = new BasicInfoViewModel());
-            ShowSettingCommend = new RelayCommand(param => CurrentViewModel = new SettingViewModel());
-
+            ShowHomeCommand = new RelayCommand<object>(param => CurrentViewModel = App.ServiceProvider.GetRequiredService<HomeViewModel>());
+            BasicInfoCommand = new RelayCommand<object>(param => CurrentViewModel = App.ServiceProvider.GetRequiredService<BasicInfoViewModel>());
+            ShowSettingCommend = new RelayCommand<object>(param => CurrentViewModel = App.ServiceProvider.GetRequiredService<SettingViewModel>());
 
             RoleName = $"[{AuthService.Role ?? ""}]";
             UserName = AuthService.UserName ?? "";
             PlaceName = AuthService.PlaceName ?? "";
         }
         
-
-
     }
 }

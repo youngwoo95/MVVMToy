@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace SlideMenuBarExample.Views.BasicInfoManagement
 {
     /// <summary>
-    /// BuildingView.xaml에 대한 상호 작용 논리
+    /// UnitView.xaml에 대한 상호 작용 논리
     /// </summary>
-    public partial class BuildingView : UserControl
+    public partial class UnitView : UserControl
     {
-        public BuildingView()
+        public UnitView()
         {
             InitializeComponent();
         }

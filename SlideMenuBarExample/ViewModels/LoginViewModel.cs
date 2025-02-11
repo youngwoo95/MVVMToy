@@ -43,8 +43,8 @@ namespace SlideMenuBarExample.ViewModels
         {
             AuthService = _authservice;
             WindowService = _windowservice;
-            LoginCommand = new RelayCommand(ExecuteLogin);
-            CancelCommand = new RelayCommand(ExecuteCancel);
+            LoginCommand = new RelayCommand<object>(ExecuteLogin);
+            CancelCommand = new RelayCommand<object>(ExecuteCancel);
 
             this.HttpApiServices = _httpapiservice;
         }

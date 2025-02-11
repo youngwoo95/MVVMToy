@@ -1,0 +1,303 @@
+﻿<UserControl x:Class="SlideMenuBarExample.Views.BasicInfoManagement.BuildingView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SlideMenuBarExample.Views.BasicInfoManagement"
+             xmlns:behaviors="clr-namespace:SlideMenuBarExample.Helpers"
+             xmlns:vm="clr-namespace:SlideMenuBarExample.ViewModels.BasicInfoManagement"
+             xmlns:views="clr-namespace:SlideMenuBarExample.Views.BasicInfoManagement.Buildings"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800"
+             Background="#232323">
+    <!-- 리소스 영역에 DataGrid 스타일 정의 -->
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        
+        <!-- 다크 테마 DataGrid 스타일 -->
+        <Style x:Key="CustomDataGridStyle" TargetType="{x:Type DataGrid}">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="RowBackground" Value="#2D2D2D"/>
+            <Setter Property="AlternatingRowBackground" Value="#333333"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="GridLinesVisibility" Value="None"/>
+            <Setter Property="HorizontalGridLinesBrush" Value="Transparent"/>
+            <Setter Property="VerticalGridLinesBrush" Value="Transparent"/>
+            <Setter Property="ColumnHeaderHeight" Value="30"/>
+            <Setter Property="RowHeaderWidth" Value="0"/>
+            <!-- 셀 스타일 -->
+            <Setter Property="CellStyle">
+                <Setter.Value>
+                    <Style TargetType="DataGridCell">
+                        <Setter Property="BorderThickness" Value="0"/>
+                        <Setter Property="Padding" Value="5"/>
+                        <Setter Property="Foreground" Value="White"/>
+                        <Setter Property="Background" Value="Transparent"/>
+                        <Setter Property="FontSize" Value="14"/>
+                        <Style.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="Background" Value="#4D4D4D"/>
+                                <Setter Property="Foreground" Value="White"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Setter.Value>
+            </Setter>
+            <!-- 컬럼 헤더 스타일 -->
+            <Setter Property="ColumnHeaderStyle">
+                <Setter.Value>
+                    <Style TargetType="DataGridColumnHeader">
+                        <Setter Property="Background" Value="#1E1E1E"/>
+                        <Setter Property="Foreground" Value="White"/>
+                        <Setter Property="FontWeight" Value="Bold"/>
+                        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                        <Setter Property="BorderThickness" Value="0"/>
+                        <Setter Property="Padding" Value="5"/>
+                        <Setter Property="FontSize" Value="14"/>
+                        <Style.Triggers>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="#4D4D4D"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
+        <!-- 가운데 정렬 텍스트 스타일 -->
+        <Style x:Key="CenterTextBlockStyle" TargetType="TextBlock">
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="TextAlignment" Value="Center"/>
+        </Style>
+        
+        <Style x:Key="CustomCellStyle" TargetType="DataGridCell">
+            <!-- 글꼴 크기를 16으로, 패딩을 상하좌우 10으로 설정 -->
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Padding" Value="10"/>
+            <!-- 필요에 따라 Margin이나 Foreground/Background도 설정 가능 -->
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Background" Value="Transparent"/>
+        </Style>
+
+        <!-- ScrollBar 버튼 스타일 -->
+        <Style x:Key="CustomScrollBarButtonStyle" TargetType="RepeatButton">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="RepeatButton">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="0">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- ScrollBar Thumb 스타일 -->
+        <Style x:Key="CustomThumbStyle" TargetType="Thumb">
+            <Setter Property="Background" Value="DarkGray"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Thumb">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="5"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- ScrollBar 전체 스타일 -->
+        <Style x:Key="CustomScrollBarStyle" TargetType="ScrollBar">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="Gray"/>
+            <Setter Property="Width" Value="10"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ScrollBar">
+                        <Grid Background="{TemplateBinding Background}">
+                            <Track x:Name="PART_Track" IsDirectionReversed="True">
+                                <Track.DecreaseRepeatButton>
+                                    <RepeatButton Command="ScrollBar.LineUpCommand"
+                                                  Style="{StaticResource CustomScrollBarButtonStyle}"/>
+                                </Track.DecreaseRepeatButton>
+                                <Track.Thumb>
+                                    <Thumb Style="{StaticResource CustomThumbStyle}"/>
+                                </Track.Thumb>
+                                <Track.IncreaseRepeatButton>
+                                    <RepeatButton Command="ScrollBar.LineDownCommand"
+                                                  Style="{StaticResource CustomScrollBarButtonStyle}"/>
+                                </Track.IncreaseRepeatButton>
+                            </Track>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <DataTemplate DataType="{x:Type vm:BuildingEditViewModel}">
+            <views:BuildingEditView/>
+        </DataTemplate>
+        
+    </UserControl.Resources>
+    
+    <!-- 전체 영역을 Grid로 구성하되, 오버레이 효과를 위해 요소들을 겹쳐 배치 -->
+    <Grid>
+        <!-- 기본 콘텐츠 영역: 내부 화면 전환 영역 -->
+        <ContentControl Content="{Binding CurrentSubView}"/>
+            
+        <!-- 오버레이 영역 : 화면 전체를 덮으면서 투명도, 애니메이션 효과 등을 줄 수 있음 -->
+        <Border Background="Black"
+                Opacity="0.5"
+                Panel.ZIndex="1"
+                Visibility="{Binding IsOverlayVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <TextBlock Text="Loading..." 
+                       Foreground="White"
+                       FontSize="24"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"/>
+        </Border>
+
+
+        <DataGrid ItemsSource="{Binding PlaceBuildings}"
+          AutoGenerateColumns="False"
+          Style="{StaticResource CustomDataGridStyle}"
+          IsReadOnly="True"
+          HeadersVisibility="Column"
+          Visibility="{Binding IsMenuVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <DataGrid.Columns>
+                <!-- 체크박스 컬럼 -->
+                <DataGridCheckBoxColumn IsReadOnly="False"
+                                Binding="{Binding BuildingCheck, Mode=TwoWay}" 
+                                Width="Auto" 
+                                Header="선택">
+                    <!-- ElementStyle / EditingElementStyle 등은 기존과 동일 -->
+                    <DataGridCheckBoxColumn.ElementStyle>
+                        <Style TargetType="CheckBox">
+                            <Setter Property="Foreground" Value="White"/>
+                            <Setter Property="Background" Value="Transparent"/>
+                            <Setter Property="BorderBrush" Value="White"/>
+                            <Setter Property="BorderThickness" Value="0.7"/>
+                            <Setter Property="HorizontalAlignment" Value="Center"/>
+                            <Setter Property="VerticalAlignment" Value="Center"/>
+                            <Setter Property="Width" Value="25"/>
+                            <Setter Property="Height" Value="25"/>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="CheckBox">
+                                        <Grid>
+                                            <Border x:Name="Border"
+                                            Background="{TemplateBinding Background}"
+                                            BorderBrush="{TemplateBinding BorderBrush}"
+                                            BorderThickness="{TemplateBinding BorderThickness}"
+                                            CornerRadius="5"
+                                            Width="{TemplateBinding Width}"
+                                            Height="{TemplateBinding Height}"
+                                            HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
+                                            VerticalAlignment="{TemplateBinding VerticalAlignment}"/>
+                                            <Path x:Name="CheckMark"
+                                          Data="M 3 9 L 8 14 L 17 5"
+                                          Stroke="White"
+                                          StrokeThickness="3"
+                                          Visibility="Collapsed"
+                                          HorizontalAlignment="Center"
+                                          VerticalAlignment="Center"/>
+                                        </Grid>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsChecked" Value="True">
+                                                <Setter TargetName="CheckMark" Property="Visibility" Value="Visible"/>
+                                            </Trigger>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter TargetName="Border" Property="BorderBrush" Value="LightBlue"/>
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </DataGridCheckBoxColumn.ElementStyle>
+                    <DataGridCheckBoxColumn.EditingElementStyle>
+                        <Style TargetType="CheckBox">
+                            <Setter Property="Foreground" Value="White"/>
+                            <Setter Property="Background" Value="Transparent"/>
+                            <Setter Property="BorderBrush" Value="White"/>
+                            <!--<Setter Property="BorderThickness" Value="0.7"/>-->
+                            <Setter Property="HorizontalAlignment" Value="Center"/>
+                            <Setter Property="VerticalAlignment" Value="Center"/>
+                            <Setter Property="Width" Value="20"/>
+                            <Setter Property="Height" Value="20"/>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="CheckBox">
+                                        <Grid>
+                                            <Border x:Name="Border"
+                                            Background="{TemplateBinding Background}"
+                                            BorderBrush="{TemplateBinding BorderBrush}"
+                                            BorderThickness="{TemplateBinding BorderThickness}"
+                                            CornerRadius="5"
+                                            Width="{TemplateBinding Width}"
+                                            Height="{TemplateBinding Height}"
+                                            HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
+                                            VerticalAlignment="{TemplateBinding VerticalAlignment}"/>
+                                            <Path x:Name="CheckMark"
+                                          Data="M 3 9 L 8 14 L 17 5"
+                                          Stroke="White"
+                                          StrokeThickness="3"
+                                          Visibility="Collapsed"
+                                          HorizontalAlignment="Center"
+                                          VerticalAlignment="Center"/>
+                                        </Grid>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsChecked" Value="True">
+                                                <Setter TargetName="CheckMark" Property="Visibility" Value="Visible"/>
+                                            </Trigger>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter TargetName="Border" Property="BorderBrush" Value="LightBlue"/>
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </DataGridCheckBoxColumn.EditingElementStyle>
+                </DataGridCheckBoxColumn>
+
+                <!-- 텍스트 컬럼들 -->
+                <DataGridTextColumn Header="건물이름" Binding="{Binding Name}" Width="*"
+                                    ElementStyle="{StaticResource CenterTextBlockStyle}"/>
+                <DataGridTextColumn Header="건물주소" Binding="{Binding Address}" Width="*"
+                                    ElementStyle="{StaticResource CenterTextBlockStyle}"/>
+                <DataGridTextColumn Header="전화번호" Binding="{Binding Tel}" Width="*"
+                                    ElementStyle="{StaticResource CenterTextBlockStyle}"/>
+                <DataGridTextColumn Header="건물층" Binding="{Binding TotalFloor}" Width="35"
+                                    ElementStyle="{StaticResource CenterTextBlockStyle}"/>
+                <DataGridTextColumn Header="준공년월"  Binding="{Binding CompletionDT, StringFormat='{}{0:yyyy-MM-dd}'}"  Width="*"
+                                    ElementStyle="{StaticResource CenterTextBlockStyle}"/>
+                <DataGridTextColumn Header="등록일자"  Binding="{Binding CreateDT, StringFormat='{}{0:yyyy-MM-dd}'}" Width="*"
+                                    ElementStyle="{StaticResource CenterTextBlockStyle}"/>
+                <DataGridTextColumn Header="민원QR" Binding="{Binding QRCode}" Width="*"
+                                    ElementStyle="{StaticResource CenterTextBlockStyle}"/>
+            </DataGrid.Columns>
+
+            <!-- RowStyle: 행이 더블클릭되면 커맨드 실행하고, BuildingCheck가 true면 빨간 테두리 적용 -->
+            <DataGrid.RowStyle>
+                <Style TargetType="DataGridRow">
+                    <Setter Property="behaviors:DataGridRowDoubleClickBehavior.DoubleClickCommand"
+                    Value="{Binding DataContext.RowDoubleClickCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"/>
+                    <!-- 기본 테두리 없음 -->
+                    <Setter Property="BorderThickness" Value="0"/>
+                    <Setter Property="Margin" Value="7"/>
+                    <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                    <Setter Property="VerticalContentAlignment" Value="Center"/>
+                    
+                </Style>
+            </DataGrid.RowStyle>
+        </DataGrid>
+
+
+
+    </Grid>
+</UserControl>

@@ -35,7 +35,7 @@ namespace SlideMenuBarExample.ViewModels
             // 페이지가 로드될 때 사업장 목록을 불러온다.
             _ = LoadPlaceListAsync();
 
-            SelectCommand = new RelayCommand(SelectPlace);
+            SelectCommand = new RelayCommand<object>(SelectPlace);
         }
 
         public async Task LoadPlaceListAsync()

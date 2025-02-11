@@ -54,14 +54,12 @@
         <DataTemplate DataType="{x:Type vm:BuildingViewModel}">
             <views:BuildingView/>
         </DataTemplate>
-        <!--
         <DataTemplate DataType="{x:Type vm:LocationViewModel}">
-            <local:LocationView/>
+            <views:LocationView/>
         </DataTemplate>
         <DataTemplate DataType="{x:Type vm:UnitViewModel}">
-            <local:UnitView/>
+            <views:UnitView/>
         </DataTemplate>
-        -->
     </UserControl.Resources>
 
     <!-- 전체 영역을 Grid로 구성하되, 오버레이 효과를 위해 요소들을 겹쳐 배치 -->

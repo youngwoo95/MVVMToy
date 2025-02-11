@@ -1,5 +1,5 @@
-﻿using SlideMenuBarExample.Commands;
-using SlideMenuBarExample.Commands.Interfaces;
+﻿using Microsoft.Extensions.DependencyInjection;
+using SlideMenuBarExample.Commands;
 using SlideMenuBarExample.ViewModels.BasicInfoManagement;
 using System.Windows.Input;
 
@@ -54,9 +54,9 @@ namespace SlideMenuBarExample.ViewModels
             IsOverlayVisible = false; // 기본적으로 오버레이 숨김
 
             // 각 Command에서 화면 전환 전후에 오버레이 효과를 적용할 수 있습니다.
-            BuildingCommand = new RelayCommand(_ => SwitchSubView(new BuildingViewModel()));
-            //LocationCommand = new RelayCommand(_ => SwitchSubView(new LocationViewModel()));
-            //UnitCommand = new RelayCommand(_ => SwitchSubView(new UnitViewModel()));
+            BuildingCommand = new RelayCommand<object>(_ => SwitchSubView(App.ServiceProvider.GetRequiredService<BuildingViewModel>()));
+            LocationCommand = new RelayCommand<object>(_ => SwitchSubView(App.ServiceProvider.GetRequiredService<LocationViewModel>()));
+            UnitCommand = new RelayCommand<object>(_ => SwitchSubView(App.ServiceProvider.GetRequiredService<UnitViewModel>()));
         }
 
         private async void SwitchSubView(ViewModelBase newViewModel)
