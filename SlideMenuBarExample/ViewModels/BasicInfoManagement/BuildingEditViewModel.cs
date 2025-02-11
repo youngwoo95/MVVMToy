@@ -7,11 +7,23 @@ namespace SlideMenuBarExample.ViewModels.BasicInfoManagement
 {
     public class BuildingEditViewModel : ViewModelBase
     {
+        private ViewModelBase _currentSubView;
+        public ViewModelBase CurrentSubView
+        {
+            get => _currentSubView;
+            set
+            {
+                _currentSubView = value;
+                OnPropertyChanged(nameof(CurrentSubView));
+            }
+        }
+
         private int BuildingId { get; }
 
         private readonly HttpApiService HttpApiService;
         private readonly IAuthService AuthService;
 
+       
         public BuildingEditViewModel(int buildingid, HttpApiService _httpapiservice, IAuthService _authservice)
         {
             BuildingId = buildingid;
@@ -19,21 +31,25 @@ namespace SlideMenuBarExample.ViewModels.BasicInfoManagement
             this.HttpApiService = _httpapiservice;
             _ = LoadBuildingEditAsync();
             
-
             Console.WriteLine(BuildingId);
         }
 
         private async Task LoadBuildingEditAsync()
         {
-            HttpResponseMessage response = await HttpApiService.GetAsync($"api/Building/sign/DetailBuilding?buildingid={BuildingId}", AuthService.Token);
-            if(response.IsSuccessStatusCode)
+            await ExecuteWithLoadingAsync(async () =>
             {
-                var responseBody = await response.Content.ReadAsStringAsync();
+                HttpResponseMessage response = await HttpApiService.GetAsync($"api/Building/sign/DetailBuilding?buildingid={BuildingId}", AuthService.Token);
+                if (response.IsSuccessStatusCode)
+                {
+                    var responseBody = await response.Content.ReadAsStringAsync();
 
-                Console.WriteLine(responseBody);
-                Console.WriteLine("");
+                    Console.WriteLine(responseBody);
+                    Console.WriteLine("");
 
-            }
+                }
+            });
+
+            
         }
 
 
