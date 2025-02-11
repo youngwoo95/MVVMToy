@@ -8,8 +8,13 @@
         ResizeMode="NoResize"
         Background="#232323"
         WindowStartupLocation="CenterScreen"
+        WindowStyle="None"
         Title="LoginWindow" Height="250" Width="300">
-
+    
+    <Window.InputBindings>
+        <KeyBinding Key="Enter" Command="{Binding LoginCommand}" />
+    </Window.InputBindings>
+    
     <Window.Resources>
         <Style x:Key="LoginStyle" TargetType="Button">
             <Setter Property="Foreground" Value="White"/>

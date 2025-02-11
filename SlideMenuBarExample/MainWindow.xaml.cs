@@ -1,5 +1,6 @@
 ﻿using SlideMenuBarExample.ViewModels;
 using System.Windows;
+using System.Windows.Input;
 
 namespace SlideMenuBarExample
 {
@@ -42,5 +43,13 @@ namespace SlideMenuBarExample
             this.Close();
         }
 
+        private void TitleBar_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            // 마우스 왼쪽 버튼이 눌린 상태이면 DragMove()를 호출하여 창 이동
+            if (e.ButtonState == MouseButtonState.Pressed)
+            {
+                this.DragMove();
+            }
+        }
     }
 }

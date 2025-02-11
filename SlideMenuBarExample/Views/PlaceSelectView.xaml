@@ -4,12 +4,21 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SlideMenuBarExample.Views"
+        xmlns:chrome="clr-namespace:System.Windows.Shell;assembly=PresentationFramework"
         mc:Ignorable="d"
         Title="PlaceSelectView"
         Height="500"
         Width="500"
+        WindowStyle="None"
         Background="#232323">
 
+    <chrome:WindowChrome.WindowChrome>
+        <chrome:WindowChrome CaptionHeight="0"
+                             CornerRadius="0"
+                             GlassFrameThickness="0"
+                             ResizeBorderThickness="0" />
+    </chrome:WindowChrome.WindowChrome>
+    
     <Window.Resources>
         <!-- 라디오 버튼의 커스텀 스타일 -->
         <Style x:Key="RadioButtonStyle" TargetType="RadioButton">
@@ -101,21 +110,32 @@
             <RowDefinition Height="20"/>
         </Grid.RowDefinitions>
 
-        <!-- 사업장 목록을 표시할 영역: 스크롤이 가능하도록 ScrollViewer 사용 -->
         <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto">
-            <ItemsControl ItemsSource="{Binding PlaceList}">
+            <ItemsControl ItemsSource="{Binding PlaceList}" Margin="10" HorizontalContentAlignment="Stretch">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Margin="0"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemContainerStyle>
+                    <Style TargetType="ContentPresenter">
+                        <Setter Property="HorizontalAlignment" Value="Stretch" />
+                    </Style>
+                </ItemsControl.ItemContainerStyle>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <!-- 라디오 버튼: Content는 사업장 이름, IsChecked는 선택 상태에 바인딩 -->
+                        <!-- 상단 여백을 제거 -->
                         <RadioButton Content="{Binding Name}"
-                                     IsChecked="{Binding isSelected, Mode=TwoWay}"
-                                     GroupName="BusinessPlaces"
-                                     Style="{StaticResource RadioButtonStyle}"/>
+                             IsChecked="{Binding isSelected, Mode=TwoWay}"
+                             Margin="3"
+                             GroupName="BusinessPlaces"
+                             Style="{StaticResource RadioButtonStyle}"
+                             HorizontalAlignment="Stretch"/>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
         </ScrollViewer>
-        
+
         <Button Style="{StaticResource SelectStyle}" Height="30" Grid.Row="1" Content="선택" Command="{Binding SelectCommand}"/>
     </Grid>
 </Window>

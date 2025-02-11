@@ -4,86 +4,108 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SlideMenuBarExample.Views"
-             mc:Ignorable="d" 
+             mc:Ignorable="d"
+             xmlns:views="clr-namespace:SlideMenuBarExample.Views.BasicInfoManagement"
+             xmlns:vm="clr-namespace:SlideMenuBarExample.ViewModels.BasicInfoManagement"
              d:DesignHeight="450" d:DesignWidth="800">
-    <!-- 리소스에 카드 스타일 정의 -->
     <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <!-- 버튼 스타일 정의 (생략: 이전에 작성한 CardButtonStyle 사용) -->
         <Style x:Key="CardButtonStyle" TargetType="Button">
-            <!-- 기본 설정 -->
+            <!-- 기존 스타일 설정들 -->
             <Setter Property="Background" Value="#4c515c" />
-            <!--<Setter Property="BorderBrush" Value="#DDD" />-->
             <Setter Property="BorderBrush" Value="Black" />
             <Setter Property="BorderThickness" Value="1" />
-            <Setter Property="Margin" Value="10" />
+            <Setter Property="Margin" Value="30" />
             <Setter Property="Padding" Value="10" />
-            <Setter Property="Width" Value="100"/>
+            <Setter Property="Width" Value="150"/>
             <Setter Property="Height" Value="100"/>
             <Setter Property="Cursor" Value="Hand"/>
-            <!-- 기본 그림자 효과 -->
             <Setter Property="Effect">
                 <Setter.Value>
-                    <DropShadowEffect Color="Black" BlurRadius="8" ShadowDepth="2" Opacity="0.2"/>
+                    <DropShadowEffect Color="white" BlurRadius="8" ShadowDepth="2" Opacity="0.2"/>
                 </Setter.Value>
             </Setter>
-            <!-- 버튼 템플릿 정의 (Border에 Effect를 TemplateBinding) -->
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
                         <Border Background="{TemplateBinding Background}"
-                             BorderBrush="{TemplateBinding BorderBrush}"
-                             BorderThickness="{TemplateBinding BorderThickness}"
-                             CornerRadius="8"
-                             Effect="{TemplateBinding Effect}">
+                          BorderBrush="{TemplateBinding BorderBrush}"
+                          BorderThickness="{TemplateBinding BorderThickness}"
+                          CornerRadius="8"
+                          Effect="{TemplateBinding Effect}">
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
                         </Border>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
-            <!-- 마우스 오버 효과 -->
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
                     <Setter Property="Effect">
                         <Setter.Value>
-                            <!--<DropShadowEffect Color="#353840" BlurRadius="12" ShadowDepth="4" Opacity="0.3"/>-->
-                            <DropShadowEffect Color="Wheat" BlurRadius="12" ShadowDepth="4" Opacity="0.3"/>
+                            <DropShadowEffect Color="white" BlurRadius="12" ShadowDepth="4" Opacity="0.3"/>
                         </Setter.Value>
                     </Setter>
                 </Trigger>
             </Style.Triggers>
         </Style>
+
+        <!-- 각 하위 화면에 대응하는 DataTemplate 정의 -->
+        <DataTemplate DataType="{x:Type vm:BuildingViewModel}">
+            <views:BuildingView/>
+        </DataTemplate>
+        <!--
+        <DataTemplate DataType="{x:Type vm:LocationViewModel}">
+            <local:LocationView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:UnitViewModel}">
+            <local:UnitView/>
+        </DataTemplate>
+        -->
     </UserControl.Resources>
 
-    <!-- WrapPanel에 ClipToBounds="False"를 설정하여 그림자(효과)가 잘리지 않도록 함 -->
-    <WrapPanel VerticalAlignment="Center" HorizontalAlignment="Center" ClipToBounds="False">
-        <Button Style="{StaticResource CardButtonStyle}">
-            <StackPanel>
-                <Image Source="pack://application:,,,/ico/home.png" Width="20" Margin="0 0 0 5"/>
-                <TextBlock Text="건물 관리" 
-                        Foreground="White" 
-                        HorizontalAlignment="Center" 
-                        VerticalAlignment="Center" 
-                        TextAlignment="Center"/>
-            </StackPanel>
-        </Button>
-        <Button Style="{StaticResource CardButtonStyle}">
-            <StackPanel>
-                <Image Source="pack://application:,,,/ico/home.png" Width="20" Margin="0 0 0 5"/>
-                <TextBlock Text="위치 관리" 
-                 Foreground="White" 
-                 HorizontalAlignment="Center" 
-                 VerticalAlignment="Center" 
-                 TextAlignment="Center"/>
-            </StackPanel>
-        </Button>
-        <Button Style="{StaticResource CardButtonStyle}">
-            <StackPanel>
-                <Image Source="pack://application:,,,/ico/home.png" Width="20" Margin="0 0 0 5"/>
-                <TextBlock Text="단위 관리" 
-         Foreground="White" 
-         HorizontalAlignment="Center" 
-         VerticalAlignment="Center" 
-         TextAlignment="Center"/>
-            </StackPanel>
-        </Button>
-    </WrapPanel>
+    <!-- 전체 영역을 Grid로 구성하되, 오버레이 효과를 위해 요소들을 겹쳐 배치 -->
+    <Grid>
+        <!-- 기본 콘텐츠 영역: 내부 화면 전환 영역 -->
+        <ContentControl Content="{Binding CurrentSubView}" />
+
+        <!-- 오버레이 영역: 화면 전체를 덮으면서 투명도, 애니메이션 효과 등을 줄 수 있음 -->
+        <Border Background="Black" 
+              Opacity="0.5"
+              Panel.ZIndex="1"
+              Visibility="{Binding IsOverlayVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <!-- 필요에 따라 오버레이 내부에 로딩 아이콘, 메시지 등을 추가 -->
+            <TextBlock Text="Loading..."
+                     Foreground="White"
+                     FontSize="24"
+                     HorizontalAlignment="Center"
+                     VerticalAlignment="Center"/>
+        </Border>
+
+        <!-- 버튼 영역을 오버레이 아래, 또는 별도의 위치에 배치할 수 있습니다.
+           여기서는 버튼 영역을 콘텐츠 영역 상단에 고정시키고 싶다면, 또 다른 컨테이너(예: DockPanel)를 사용할 수 있습니다. 
+           아래 예시는 버튼들을 화면 상단에 배치하는 오버레이 없이 단순하게 구성한 예시입니다. -->
+        <!-- 버튼 영역 (메뉴) -->
+        <WrapPanel HorizontalAlignment="Center" VerticalAlignment="Center"  Panel.ZIndex="2"
+           Visibility="{Binding IsMenuVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <Button Style="{StaticResource CardButtonStyle}" Command="{Binding BuildingCommand}">
+                <StackPanel>
+                    <Image Source="pack://application:,,,/ico/building.png" Width="30" Margin="0 0 0 5"/>
+                    <TextBlock Text="건물 관리" Foreground="White" HorizontalAlignment="Center"/>
+                </StackPanel>
+            </Button>
+            <Button Style="{StaticResource CardButtonStyle}" Command="{Binding LocationCommand}">
+                <StackPanel>
+                    <Image Source="pack://application:,,,/ico/location.png" Width="30" Margin="0 0 0 5"/>
+                    <TextBlock Text="위치 관리" Foreground="White" HorizontalAlignment="Center"/>
+                </StackPanel>
+            </Button>
+            <Button Style="{StaticResource CardButtonStyle}" Command="{Binding UnitCommand}">
+                <StackPanel>
+                    <Image Source="pack://application:,,,/ico/unit.png" Width="30" Margin="0 0 0 5"/>
+                    <TextBlock Text="단위 관리" Foreground="White" HorizontalAlignment="Center"/>
+                </StackPanel>
+            </Button>
+        </WrapPanel>
+    </Grid>
 </UserControl>

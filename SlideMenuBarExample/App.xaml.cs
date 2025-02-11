@@ -63,7 +63,6 @@ namespace SlideMenuBarExample
             Services.AddTransient<PlaceSelectViewModel>();
             Services.AddTransient<MainViewModel>();
 
-
             // View 등록
             Services.AddTransient<LoginWindow>();
             Services.AddTransient<PlaceSelectView>();

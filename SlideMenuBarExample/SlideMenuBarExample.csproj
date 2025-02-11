@@ -16,18 +16,25 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="ico\building.PNG" />
     <None Remove="ico\home.ico" />
     <None Remove="ico\home.PNG" />
     <None Remove="ico\home2.svg" />
+    <None Remove="ico\location.png" />
     <None Remove="ico\menu.ico" />
     <None Remove="ico\menubutton.PNG" />
     <None Remove="ico\profile1.jpg" />
     <None Remove="ico\setting.svg" />
     <None Remove="ico\setting3.png" />
     <None Remove="ico\setting4.PNG" />
+    <None Remove="ico\unit.png" />
+    <None Remove="ico\user.png" />
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="ico\building.PNG">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="ico\home.ico">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -35,6 +42,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="ico\home2.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ico\location.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="ico\menu.ico">
@@ -53,6 +63,12 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="ico\setting4.PNG">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ico\unit.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ico\user.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
