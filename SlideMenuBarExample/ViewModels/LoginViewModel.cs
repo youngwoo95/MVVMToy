@@ -98,6 +98,7 @@ namespace SlideMenuBarExample.ViewModels
                     else
                     {
                         // 아이디 비밀번호가 안맞을때
+                        Console.WriteLine("회원정보가 일치하지 않습니다.");
                     }
                 }
                 else

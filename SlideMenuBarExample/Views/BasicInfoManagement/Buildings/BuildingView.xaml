@@ -26,6 +26,7 @@
             <Setter Property="VerticalGridLinesBrush" Value="Transparent"/>
             <Setter Property="ColumnHeaderHeight" Value="30"/>
             <Setter Property="RowHeaderWidth" Value="0"/>
+            
             <!-- 셀 스타일 -->
             <Setter Property="CellStyle">
                 <Setter.Value>
